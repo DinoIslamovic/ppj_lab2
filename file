@@ -1,0 +1,10 @@
+<S> := <A><B>c
+<A> := a<A> | b<B> | d$
+<B> := $
+
+aaaaahaabdc
+
+s=a<a><b><c>
+s=aaaaaaa<a><b><c>
+s=aaaaaaab<b><b><c>
+s=aaaaaaabc

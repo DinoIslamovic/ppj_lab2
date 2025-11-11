@@ -1,6 +1,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 
 size_t getline(char **lineptr, size_t *n, FILE *stream) {
@@ -58,9 +59,12 @@ size_t getline(char **lineptr, size_t *n, FILE *stream) {
 int main() {
     char* line;
     size_t len;
-    printf("hi");
+    string arr[1000];
+    int i = 0;
     while (getline(&line,&len,stdin) != -1) {
-        printf("<s>%s",line);
+        arr[i] = line;
+        i++;
+        printf("<s>%s",arr[i]);
         free(line);
     }
     return EXIT_SUCCESS;

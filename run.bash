@@ -3,7 +3,7 @@
 echo "================="
 echo "Generiranje"
 echo "================="
-python3 GSA.py < ulaz.txt > izlaz.txt
+python3 GSA.py < ulaz.txt #> izlaz.txt
 echo "================="
 echo "ANALIZIRANJE"
 echo "================="

@@ -1,0 +1,8 @@
+S B A
+- Stavi(2) Stavi(1)
+- - -
+- Stavi(2) Stavi(5)
+- Stavi(6) -
+- - -
+- - -
+- - -

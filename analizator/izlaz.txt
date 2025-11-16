@@ -1,1 +1,4 @@
-{'nezavrsni_znakovi': ['<A>', '<B>', '<C>', '<D>', '<E>'], 'zavrsni_znakovi': ['a', 'b', 'c', 'd', 'e', 'f'], 'sinkronizacijski_znakovi': ['a'], 'gramatike': {'<A>': [['<B>', '<C>', 'c'], ['e', '<D>', '<B>']], '<B>': [['$'], ['b', '<C>', '<D>', '<E>']], '<C>': [['<D>', 'a', '<B>'], ['c', 'a']], '<D>': [['$'], ['d', '<D>']], '<E>': [['e', '<A>', 'f'], ['c']]}}
+[['a', '1', 'x', 'x', 'x'], ['b', '2', 'y', 'y'], ['a', '3', 'xx', 'xx'], ['a', '4', 'xx', 'xx', 'xx'], ['b', '4', 'y']]
+{'nezavrsni_znakovi': ['<A>', '<B>'], 'zavrsni_znakovi': ['a', 'b'], 'sinkronizacijski_znakovi': ['b'], 'gramatike': {'<A>': [['<B>', '<A>'], ['$']], '<B>': [['a', '<B>'], ['b']]}}
+[['a', 'b', 'oT'], ['Pomakni(3)', 'Pomakni(4)', 'Reduciraj(<A>,$)'], ['-', '-', 'Prihvati()'], ['Pomakni(3)', 'Pomakni(4)', 'Reduciraj(A,$)'], ['Pomakni(3)', 'Pomakni(4)', '-'], ['Reduciraj(B,b)', 'Reduciraj(B,b)', 'Reduciraj(B,b)'], ['-', '-', 'Reduciraj(A,BA)'], ['Reduciraj(B,aB)', 'Reduciraj(B,aB)', 'Reduciraj(B,aB)']]
+[['S', 'B', 'A'], ['-', 'Stavi(2)', 'Stavi(1)'], ['-', '-', '-'], ['-', 'Stavi(2)', 'Stavi(5)'], ['-', 'Stavi(6)', '-'], ['-', '-', '-'], ['-', '-', '-'], ['-', '-', '-']]

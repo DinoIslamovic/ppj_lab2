@@ -1,0 +1,8 @@
+a b oT
+Pomakni(3) Pomakni(4) Reduciraj(<A>,$)
+- - Prihvati()
+Pomakni(3) Pomakni(4) Reduciraj(A,$)
+Pomakni(3) Pomakni(4) -
+Reduciraj(B,b) Reduciraj(B,b) Reduciraj(B,b)
+- - Reduciraj(A,BA)
+Reduciraj(B,aB) Reduciraj(B,aB) Reduciraj(B,aB)

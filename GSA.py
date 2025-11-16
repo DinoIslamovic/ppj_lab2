@@ -99,7 +99,7 @@ def zapocinje_niz(niz_znakova, analizator_data):
 def zatvorenje_seta_LR_stavki(inicijalna_stavka,analizator_data)->set:
     zatvorenje = dict()
     (key_inic, lookback) = incijalna_stavka
-    zatvorenje =
+    #zatvorenje =
     for ((lijevo, desno),lookback) in zatvorenje:
         sljedeci_znak_index = desno.index('tocka')+1
         if len(desno)> sljedeci_znak_index:
@@ -110,7 +110,7 @@ def zatvorenje_seta_LR_stavki(inicijalna_stavka,analizator_data)->set:
         novo_lijevo = desno[sljedeci_znak_index]
         for produkcija in analizator_data['gramatike'][desno[sljedeci_znak_index]]:
             novo_desno = ['tocka'] + produkcija
-            novi_lookback =
+            #novi_lookback =
         continue
     return set()
 
@@ -164,8 +164,8 @@ if __name__ == '__main__':
 
     #print([(k,v) for k,values in LR_stavke.items() for v in values])
     #print(next(iter(LR_stavke)))
-    print("ODREDI ZAPOCINJANJE")
-    print(zapocinje_niz(["<A>", "<B>", "<D>"],analizator_data))
+    #print("ODREDI ZAPOCINJANJE")
+    #print(zapocinje_niz(["<A>", "<B>", "<D>"],analizator_data))
     #print(zapocinje_izravno_znakom(analizator_data['nezavrsni_znakovi'][1], analizator_data['nezavrsni_znakovi'][0], analizator_data))
     napravi_epsilon_NKA(analizator_data, LR_stavke)
 

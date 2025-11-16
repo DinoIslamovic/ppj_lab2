@@ -61,17 +61,12 @@ def epsilon_nka_u_dka(epsilon_nka: dict) -> dict:
         dka['F'].add(dka['q_0'])
     while queue:
         q = queue.pop(0)
-        if q==(('<A>', ('<B>', '<A>', 'tocka')), frozenset({''})):
-            print()
-        if q==(('<A>', ('<B>', 'tocka', '<A>')), frozenset({''})):
-            print()
         for sigma in dka['Sigma']:
             dka['Delta'][(q, sigma)] = set()
             for q_e in q:
                 if (q_e, sigma) in epsilon_nka['Delta']:
                     dka['Delta'][(q, sigma)].update(epsilon_nka['Delta'][(q_e, sigma)])
             dka['Delta'][(q, sigma)] = frozenset(epsilon_okruzenje_list(epsilon_nka, dka['Delta'][(q, sigma)]))
-            print(dka['Delta'][(q, sigma)])
             if dka['Delta'][(q, sigma)] not in dka['Q'] and dka['Delta'][(q, sigma)]:
                 dka['Q'].add(dka['Delta'][(q, sigma)])
                 queue.append(dka['Delta'][(q, sigma)])

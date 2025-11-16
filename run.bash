@@ -8,4 +8,4 @@ echo "================="
 echo "ANALIZIRANJE"
 echo "================="
 cd analizator
-python3 SA.py < ulaz.txt > izlaz.txt
+python3 SA.py < ulaz.txt

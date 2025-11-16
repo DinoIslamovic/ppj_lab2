@@ -1,6 +1,7 @@
+import 'epsilon_nka_u_dka.py'
 
-
-def nka_u_dka(nka:dict)->dict:
+def epsilon_nka_u_dka(epsilon_nka:dict)->dict:
+    nka =
     dka = dict()
     dka['F'] = nka['F']
     dka['Q'] =

@@ -1,6 +1,8 @@
-%V <A> <B>
+%V <S> <A> <B>
 %T a b
 %Syn b
+<S>
+ <A>
 <A>
  <B> <A>
 <B>

@@ -1,6 +1,7 @@
 import fileinput
 import json
 import time
+import epsilon_nka_u_nka
 
 def odredi_prazne_znakove(analizator_data):
     dodan = True
@@ -92,8 +93,8 @@ def zapocinje_niz(niz_znakova, analizator_data):
         for znak2 in sviznakovi:
             if tablica_zapocinjanja[sviznakovi.index(znak1)][sviznakovi.index(znak2)] and znak2 not in niz_zapocinje:
                 niz_zapocinje.append(znak2)
-    for i in range(len(tablica_zapocinjanja)):
-        print(tablica_zapocinjanja[i])
+    #for i in range(len(tablica_zapocinjanja)):
+        #print(tablica_zapocinjanja[i])
     return niz_zapocinje
 
 def zatvorenje_seta_LR_stavki(inicijalna_stavka,analizator_data)->set:
@@ -126,7 +127,7 @@ def generiraj_epsilon_nka(analizator_data)->dict:
     red_stanja_b = [pocetno_stanje]
     red_stanja_c = [pocetno_stanje]
     while red_stanja_b or red_stanja_c:
-        print()
+        #print()
         if red_stanja_b:
             # Korak B
             q = ((lijevo, desno_tup),lookback) = red_stanja_b.pop(0)
@@ -148,7 +149,7 @@ def generiraj_epsilon_nka(analizator_data)->dict:
             epsilon_nka['Q'].add(q_delta)
             epsilon_nka['Delta'][(q,desno[1])] = {q_delta}
             if len(epsilon_nka['Q']) == Q_stara_velicina: continue
-            print('B: ',q_delta)
+            #print('B: ',q_delta)
             red_stanja_b.append(q_delta)
             red_stanja_c.append(q_delta)
         if red_stanja_c:
@@ -180,7 +181,7 @@ def generiraj_epsilon_nka(analizator_data)->dict:
                 Q_stara_velicina = len(epsilon_nka['Q'])
                 epsilon_nka['Q'].add(q_delta_novi)
                 if len(epsilon_nka['Q']) == Q_stara_velicina: continue
-                print('C: ',q_delta_novi)
+                #print('C: ',q_delta_novi)
                 red_stanja_b.append(q_delta_novi)
                 red_stanja_c.append(q_delta_novi)
             epsilon_nka['Delta'][(q,'')] = Q_delta
@@ -196,13 +197,6 @@ def stvori_LR_stavke(produkcije):
             LR_stavke.append(temp)
     return LR_stavke
 
-def napravi_epsilon_NKA(gramatika, LR_stavke):
-    automat = dict()
-    ulazni_znakovi = gramatika['nezavrsni_znakovi'] + gramatika['zavrsni_znakovi']
-    automat["pocetni"] = [next(iter(gramatika['nezavrsni_znakovi'])), LR_stavke[next(iter(gramatika['nezavrsni_znakovi']))][0]]
-
-    #print(automat["pocetni"])
-
 
 if __name__ == '__main__':
     analizator_data = dict()
@@ -210,15 +204,16 @@ if __name__ == '__main__':
     analizator_data['zavrsni_znakovi'] = []
     analizator_data['sinkronizacijski_znakovi'] = []
     analizator_data['gramatike'] = dict()
+    gramatike_error_check = []
     lijeva:str = ""
     for line in fileinput.input():
-        if line[1] == 'V':
+        if line[:2] == '%V':
             analizator_data['nezavrsni_znakovi'] = line.rstrip("\n").rstrip("\r").split(' ')[1:]
             continue
-        if line[1] == 'T':
+        if line[:2] == '%T':
             analizator_data['zavrsni_znakovi'] = line.rstrip("\n").rstrip("\r").split(' ')[1:]
             continue
-        if line[1] == 'S':
+        if line[:2] == '%S':
             analizator_data['sinkronizacijski_znakovi'] = line.rstrip("\n").rstrip("\r").split(' ')[1:]
             continue
 
@@ -227,20 +222,24 @@ if __name__ == '__main__':
         else:
             analizator_data['gramatike'].setdefault(lijeva,[])
             analizator_data['gramatike'][lijeva].append(line.rstrip("\n").rstrip("\r").lstrip(" ").split(' '))
+            gramatike_error_check.append((lijeva,line.rstrip("\n").rstrip("\r").lstrip(" ").split(' ')))
 
 
 
+    '''
     znakovi = analizator_data['nezavrsni_znakovi']
     LR_stavke = dict()
     for znak in znakovi:
         LR_stavke[znak] = stvori_LR_stavke(analizator_data['gramatike'][znak])
+    '''
 
     #print([(k,v) for k,values in LR_stavke.items() for v in values])
     #print(next(iter(LR_stavke)))
     #print("ODREDI ZAPOCINJANJE")
     #print(zapocinje_niz(["<A>", "<B>", "<D>"],analizator_data))
     #print(zapocinje_izravno_znakom(analizator_data['nezavrsni_znakovi'][1], analizator_data['nezavrsni_znakovi'][0], analizator_data))
-    napravi_epsilon_NKA(analizator_data, LR_stavke)
+    with open('analizator/tablica.py', 'w') as file_tablica:
+        file_tablica.write('tablica = '+ repr(epsilon_nka_u_nka.epsilon_nka_u_tablicu(generiraj_epsilon_nka(analizator_data))))
 
     with open('analizator/analizator_data.json', 'w') as file_analizator:
         json.dump(analizator_data, file_analizator, indent=2)

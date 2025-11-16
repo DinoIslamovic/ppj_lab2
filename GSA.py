@@ -114,6 +114,79 @@ def zatvorenje_seta_LR_stavki(inicijalna_stavka,analizator_data)->set:
         continue
     return set()
 
+def generiraj_epsilon_nka(analizator_data)->dict:
+    prazni_znakovi = odredi_prazne_znakove(analizator_data)
+    epsilon_nka = dict()
+    epsilon_nka['Sigma'] = analizator_data['nezavrsni_znakovi']+analizator_data['zavrsni_znakovi']
+    epsilon_nka['Delta'] = dict()
+    # Korak A
+    pocetno_stanje = (('S\'', tuple(['tocka', analizator_data['nezavrsni_znakovi'][0]])), frozenset({''}))
+    epsilon_nka['Q'] = {pocetno_stanje}
+    epsilon_nka['q_0'] = pocetno_stanje
+    red_stanja_b = [pocetno_stanje]
+    red_stanja_c = [pocetno_stanje]
+    while red_stanja_b or red_stanja_c:
+        print()
+        if red_stanja_b:
+            # Korak B
+            q = ((lijevo, desno_tup),lookback) = red_stanja_b.pop(0)
+            desno = list(desno_tup)
+            if len(desno) == 0: continue
+            if desno[-1]=='tocka': continue
+            tocka_index = desno.index('tocka')
+            desno_delta = []
+            if desno[tocka_index+1]!='$' and len(desno)> tocka_index+2:
+                desno_delta = desno[:tocka_index] + [desno[tocka_index+1],desno[tocka_index]] + desno[tocka_index+2:]
+            if desno[tocka_index+1]=='$' and len(desno)> tocka_index+2:
+                desno_delta = desno[:tocka_index+1] + desno[tocka_index+2:]
+            if desno[tocka_index+1]!='$' and len(desno)<=tocka_index+2:
+                desno_delta = desno[:tocka_index] + [desno[tocka_index+1],desno[tocka_index]]
+            if desno[tocka_index+1]=='$' and len(desno)<=tocka_index+2:
+                desno_delta = desno[:tocka_index]
+            q_delta = ((lijevo, tuple(desno_delta)), lookback)
+            Q_stara_velicina = len(epsilon_nka['Q'])
+            epsilon_nka['Q'].add(q_delta)
+            epsilon_nka['Delta'][(q,desno[1])] = {q_delta}
+            if len(epsilon_nka['Q']) == Q_stara_velicina: continue
+            print('B: ',q_delta)
+            red_stanja_b.append(q_delta)
+            red_stanja_c.append(q_delta)
+        if red_stanja_c:
+            # Korak C
+            q = ((lijevo, desno_tup),lookback) = red_stanja_c.pop(0)
+            desno = list(desno_tup)
+            if desno[-1]=='tocka': continue
+            tocka_index = desno.index('tocka')
+            if not desno[tocka_index+1] in analizator_data['nezavrsni_znakovi']: continue
+            gramatike = analizator_data['gramatike'][desno[tocka_index+1]]
+            Q_delta = set()
+            lijevo_delta = desno[tocka_index+1]
+            T = set()
+            if tocka_index+2>=len(desno):
+                T.update(lookback)
+            else:
+                b_1 =[znak for znak in zapocinje_niz(desno[tocka_index+2:],analizator_data) if znak in analizator_data['zavrsni_znakovi']]
+                T.update(set(b_1))
+                beta_moze_biti_prazna =  len(set(desno[tocka_index+2:]) & set(prazni_znakovi))==len(set(desno[tocka_index+2:]))
+                if beta_moze_biti_prazna:
+                    T.update(lookback)
+            for gramatika in gramatike:
+                q_delta_novi = ()
+                if gramatika==['$']:
+                    q_delta_novi = ((lijevo_delta,tuple(['tocka'])),frozenset(T))
+                else:
+                    q_delta_novi = ((lijevo_delta,tuple(['tocka']+gramatika)),frozenset(T))
+                Q_delta.add(q_delta_novi)
+                Q_stara_velicina = len(epsilon_nka['Q'])
+                epsilon_nka['Q'].add(q_delta_novi)
+                if len(epsilon_nka['Q']) == Q_stara_velicina: continue
+                print('C: ',q_delta_novi)
+                red_stanja_b.append(q_delta_novi)
+                red_stanja_c.append(q_delta_novi)
+            epsilon_nka['Delta'][(q,'')] = Q_delta
+    epsilon_nka['F'] = epsilon_nka['Q']
+    return epsilon_nka
+
 def stvori_LR_stavke(produkcije):
     LR_stavke = []
     for lista in produkcije:
